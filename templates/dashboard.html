@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | NEON BEAT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 200, 220, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 80% 70%, rgba(255, 180, 210, 0.35) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 184, 210, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 30%, #FFB8D2 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            color: #FFB8D2;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 184, 210, 0.5);
+            color: #FFB8D2;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #FFB8D2;
+            color: #000;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 span {
+            color: #FFB8D2;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .order-form {
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 184, 210, 0.3);
+        }
+
+        .order-form h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #FFB8D2;
+        }
+
+        .order-form .subtitle {
+            color: #B0B0B0;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: #222;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #222;
+            color: #fff;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FFB8D2;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFB8D2 0%, #ff9ec5 100%);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-submit:hover {
+            background: transparent;
+            color: #FFB8D2;
+            border: 2px solid #FFB8D2;
+        }
+
+        .orders-list {
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 184, 210, 0.3);
+        }
+
+        .orders-list h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .orders-subtitle {
+            color: #B0B0B0;
+            margin-bottom: 30px;
+        }
+
+        .order-card {
+            background: rgba(34, 34, 34, 0.6);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .order-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #FFB8D2;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 200, 0, 0.2);
+            color: #ffc800;
+            border: 1px solid rgba(255, 200, 0, 0.3);
+        }
+
+        .status-in_progress {
+            background: rgba(0, 150, 255, 0.2);
+            color: #0096ff;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+        }
+
+        .status-completed {
+            background: rgba(0, 255, 0, 0.2);
+            color: #51cf66;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .status-cancelled {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .order-details {
+            color: #B0B0B0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .order-details span {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .cancel-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #ff6b6b;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #B0B0B0;
+        }
+
+        .flash-message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .flash-success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #51cf66;
+        }
+
+        .flash-error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff6b6b;
+        }
+
+        .flash-info {
+            background: rgba(0, 150, 255, 0.1);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            color: #0096ff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo" style="text-decoration: none;">NEON BEAT</a>
+        <div class="user-info">
+            <span class="user-name">🎵 {{ current_user.username }}</span>
+            <a href="/logout" class="logout-btn">Выйти</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Личный кабинет <span>продюсера</span></h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="dashboard-grid">
+            <!-- Форма заказа бита -->
+            <div class="order-form">
+                <h2>🎹 Заказать бит</h2>
+                <p class="subtitle">Опишите вашу идею, и мы создадим уникальный трек</p>
+
+                <form action="/create_order" method="POST">
+                    <div class="form-group">
+                        <label>Название трека *</label>
+                        <input type="text" name="track_name" placeholder="Например: Midnight Dreams" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Жанр *</label>
+                        <select name="genre" required>
+                            <option value="">Выберите жанр</option>
+                            <option value="hip-hop">Hip-Hop / Trap</option>
+                            <option value="edm">EDM / Electronic</option>
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="lo-fi">Lo-Fi</option>
+                            <option value="r&b">R&B</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="classical">Classical / Orchestral</option>
+                            <option value="drill">Drill</option>
+                            <option value="reggaeton">Reggaeton</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Описание / Идея *</label>
+                        <textarea name="description" placeholder="Опишите настроение, структуру, какие инструменты использовать, есть ли референсы..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Темп (BPM)</label>
+                        <input type="number" name="tempo" placeholder="Например: 140" min="40" max="300">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Настроение</label>
+                        <select name="mood">
+                            <option value="">Выберите настроение</option>
+                            <option value="dark">Темное / Агрессивное</option>
+                            <option value="happy">Веселое / Энергичное</option>
+                            <option value="sad">Грустное / Меланхоличное</option>
+                            <option value="epic">Эпическое / Мощное</option>
+                            <option value="chill">Расслабленное / Chill</option>
+                            <option value="romantic">Романтичное</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Референс-трек (ссылка или название)</label>
+                        <input type="text" name="reference_track" placeholder="Например: Drake - God's Plan">
+                    </div>
+
+                    <button type="submit" class="btn-submit">🎵 Отправить заявку</button>
+                </form>
+            </div>
+
+            <!-- Список заказов -->
+            <div class="orders-list">
+                <h2>📋 Мои заказы</h2>
+                <p class="orders-subtitle">История ваших заявок на создание битов</p>
+
+                {% if orders %}
+                    {% for order in orders %}
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-title">{{ order.track_name }}</div>
+                            <span class="status-badge status-{{ order.status }}">
+                                {% if order.status == 'pending' %}Ожидает
+                                {% elif order.status == 'in_progress' %}В работе
+                                {% elif order.status == 'completed' %}Готов
+                                {% elif order.status == 'cancelled' %}Отменен
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="order-details">
+                            <p><span>Жанр:</span> {{ order.genre }}</p>
+                            <p><span>Описание:</span> {{ order.description[:100] }}{% if order.description|length > 100 %}...{% endif %}</p>
+                            {% if order.tempo %}<p><span>Темп:</span> {{ order.tempo }} BPM</p>{% endif %}
+                            {% if order.mood %}<p><span>Настроение:</span> {{ order.mood }}</p>{% endif %}
+                            {% if order.admin_comment %}<p><span>Ответ от студии:</span> {{ order.admin_comment }}</p>{% endif %}
+                            <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                                Создан: {{ order.created_at.strftime('%d.%m.%Y в %H:%M') }}
+                            </p>
+                        </div>
+                        {% if order.status == 'pending' %}
+                        <a href="/cancel_order/{{ order.id }}" class="cancel-btn" onclick="return confirm('Отменить заказ?')">Отменить</a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-orders">
+                        <p style="font-size: 18px;">🎵 У вас пока нет заказов</p>
+                        <p style="margin-top: 10px;">Заполните форму слева, чтобы создать первый бит!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

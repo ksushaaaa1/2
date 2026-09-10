@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON BEAT | Разработка онлайн музыки</title>
+    <!-- Подключение шрифта Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #F9F9F9;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* ----- СОЗДАЕМ ЭФФЕКТ НЕЖНЫХ ПИОНОВ НА ЧЕРНОМ ФОНЕ ----- */
+
+        /* Основной слой с крупными пионами */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 200, 220, 0.35) 0%, transparent 35%),
+                radial-gradient(circle at 80% 70%, rgba(255, 180, 210, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(255, 220, 235, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 70% 20%, rgba(255, 160, 200, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 90% 40%, rgba(255, 210, 230, 0.35) 0%, transparent 30%),
+                radial-gradient(circle at 15% 60%, rgba(255, 190, 215, 0.3) 0%, transparent 28%),
+                radial-gradient(circle at 55% 45%, rgba(255, 230, 245, 0.3) 0%, transparent 32%),
+                radial-gradient(circle at 75% 85%, rgba(255, 170, 205, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 30% 15%, rgba(255, 215, 235, 0.25) 0%, transparent 25%),
+                radial-gradient(circle at 95% 15%, rgba(255, 185, 215, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 45% 95%, rgba(255, 205, 225, 0.3) 0%, transparent 28%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        /* Второй слой с мелкими лепестками и деталями */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-radial-gradient(circle at 25% 35%, rgba(255, 210, 230, 0.2) 0px, transparent 4px),
+                repeating-radial-gradient(circle at 65% 55%, rgba(255, 190, 220, 0.2) 0px, transparent 5px),
+                repeating-radial-gradient(circle at 45% 25%, rgba(255, 230, 245, 0.15) 0px, transparent 3px),
+                repeating-radial-gradient(circle at 85% 75%, rgba(255, 170, 205, 0.2) 0px, transparent 4px),
+                repeating-radial-gradient(circle at 15% 85%, rgba(255, 215, 235, 0.15) 0px, transparent 3px),
+                repeating-radial-gradient(circle at 75% 15%, rgba(255, 195, 225, 0.2) 0px, transparent 4px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.8;
+            mix-blend-mode: overlay;
+        }
+
+        /* Слой для hero секции - крупные пионы справа */
+        .hero {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 80% 30%, rgba(255, 210, 235, 0.4) 0%, transparent 45%),
+                radial-gradient(circle at 60% 70%, rgba(255, 180, 215, 0.35) 0%, transparent 40%),
+                radial-gradient(circle at 95% 50%, rgba(255, 230, 250, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 70% 40%, rgba(255, 200, 225, 0.3) 0%, transparent 30%);
+            z-index: -1;
+            pointer-events: none;
+            border-radius: 0 0 0 50px;
+            mix-blend-mode: screen;
+        }
+
+        /* Слой для демо-плеера - нежные пионы с наклоном */
+        .demo-player {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-player::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -10%;
+            width: 120%;
+            height: 160%;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(255, 200, 230, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(255, 220, 245, 0.3) 0%, transparent 45%),
+                radial-gradient(circle at 40% 80%, rgba(255, 180, 210, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 80% 20%, rgba(255, 210, 235, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 20% 70%, rgba(255, 190, 220, 0.25) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(-3deg);
+            mix-blend-mode: screen;
+        }
+
+        .demo-player > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Слой для секции особенностей */
+        .features {
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 40%, rgba(255, 190, 220, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 80% 60%, rgba(255, 220, 245, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 40% 80%, rgba(255, 170, 205, 0.2) 0%, transparent 35%),
+                radial-gradient(circle at 90% 20%, rgba(255, 200, 230, 0.2) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 60px 60px 0 0;
+            mix-blend-mode: screen;
+        }
+
+        .features .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Слой для секции workflow */
+        .workflow {
+            position: relative;
+        }
+
+        .workflow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 30% 50%, rgba(255, 210, 235, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 70% 30%, rgba(255, 180, 215, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 50% 80%, rgba(255, 230, 250, 0.2) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .workflow .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Слой для секции технологий */
+        .tech-showcase {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-showcase::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -10%;
+            width: 120%;
+            height: 160%;
+            background:
+                radial-gradient(circle at 40% 50%, rgba(255, 200, 230, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 220, 245, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 20% 30%, rgba(255, 180, 210, 0.25) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(2deg);
+            mix-blend-mode: screen;
+        }
+
+        .tech-showcase > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Слой для CTA секции */
+        .cta-section {
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 190, 220, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 210, 235, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 50% 50%, rgba(255, 230, 250, 0.2) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .cta-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Слой для футера */
+        .footer {
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 30% 50%, rgba(255, 200, 225, 0.2) 0%, transparent 35%),
+                radial-gradient(circle at 70% 50%, rgba(255, 220, 240, 0.2) 0%, transparent 30%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .footer > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        :root {
+            --soft-pink: #FFB8D2;
+            --soft-pink-light: #FFE4EB;
+            --black: #000000;
+            --black-light: #111111;
+            --text-dim: #B0B0B0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* ===== НАВИГАЦИЯ ===== */
+        .navbar {
+            padding: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 184, 210, 0.15);
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 4;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding-left: 30px;
+            padding-right: 30px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 30%, var(--soft-pink) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+            cursor: pointer;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-links a:hover {
+            color: var(--soft-pink);
+        }
+
+        .nav-button {
+            background-color: transparent;
+            border: 1.5px solid var(--soft-pink);
+            color: var(--soft-pink);
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-button:hover {
+            background-color: var(--soft-pink);
+            color: var(--black);
+            text-shadow: none;
+        }
+
+        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--black-light);
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 184, 210, 0.3);
+            position: relative;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--soft-pink);
+        }
+
+        .modal h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .modal-subtitle {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: #222;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--soft-pink);
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--soft-pink);
+            color: var(--black);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-btn:hover {
+            background-color: transparent;
+            color: var(--soft-pink);
+            border: 1px solid var(--soft-pink);
+            padding: 14px;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .modal-footer a {
+            color: var(--soft-pink);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Стили для модального окна "О программе" */
+        .about-content {
+            text-align: center;
+        }
+
+        .about-icon {
+            font-size: 60px;
+            color: var(--soft-pink);
+            margin-bottom: 20px;
+        }
+
+        .about-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--soft-pink);
+        }
+
+        .about-group {
+            background-color: rgba(255, 184, 210, 0.1);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+        }
+
+        .about-group p {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .about-year {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        /* ===== ЧАТ ПОДДЕРЖКИ ===== */
+        .support-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--soft-pink);
+            border: none;
+            color: var(--black);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(255, 184, 210, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background-color: var(--black-light);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 184, 210, 0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background-color: #222;
+            border-bottom: 1px solid rgba(255, 184, 210, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+            color: var(--soft-pink);
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .chat-close:hover {
+            color: var(--soft-pink);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+
+        .message.support {
+            align-self: flex-start;
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.support .message-content {
+            background-color: #222;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+            color: #fff;
+        }
+
+        .message.user .message-content {
+            background-color: var(--soft-pink);
+            color: var(--black);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 4px;
+            margin-left: 8px;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background-color: #222;
+            border-top: 1px solid rgba(255, 184, 210, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--soft-pink);
+        }
+
+        .chat-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--soft-pink);
+            border: none;
+            color: var(--black);
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send:hover {
+            background-color: transparent;
+            color: var(--soft-pink);
+            border: 1px solid var(--soft-pink);
+        }
+
+        /* ===== ДЕМО-ПЛЕЕР ===== */
+        .demo-player {
+            background: rgba(17, 17, 17, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 60px 0;
+            border: 1px solid rgba(255, 184, 210, 0.4);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .player-info h3 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .player-info h3 span {
+            color: var(--soft-pink);
+        }
+
+        .player-info p {
+            color: var(--text-dim);
+            margin-bottom: 25px;
+        }
+
+        .track-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .track-artist {
+            color: var(--soft-pink);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #333;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--soft-pink), #fff);
+            border-radius: 3px;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        .time-stamps {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .control-btn:hover {
+            color: var(--soft-pink);
+        }
+
+        .play-btn {
+            background-color: var(--soft-pink);
+            color: var(--black);
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .play-btn:hover {
+            background-color: transparent;
+            color: var(--soft-pink);
+            border: 2px solid var(--soft-pink);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .volume-control i {
+            color: var(--soft-pink);
+            font-size: 16px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background-color: #333;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-fill {
+            width: 70%;
+            height: 100%;
+            background-color: var(--soft-pink);
+            border-radius: 2px;
+        }
+
+        /* Визуализатор */
+        .visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 200px;
+            width: 100%;
+            position: relative;
+            z-index: 3;
+        }
+
+        .visualizer .bar {
+            width: 12px;
+            height: 60px;
+            background: linear-gradient(to top, var(--soft-pink), #fff);
+            border-radius: 20px;
+            transition: height 0.15s ease-out;
+            transform-origin: bottom;
+            will-change: height;
+            box-shadow: 0 0 15px rgba(255, 184, 210, 0.5);
+        }
+
+        .visualizer .bar:nth-child(1) { height: 80px; }
+        .visualizer .bar:nth-child(2) { height: 120px; }
+        .visualizer .bar:nth-child(3) { height: 160px; }
+        .visualizer .bar:nth-child(4) { height: 100px; }
+        .visualizer .bar:nth-child(5) { height: 140px; }
+        .visualizer .bar:nth-child(6) { height: 90px; }
+        .visualizer .bar:nth-child(7) { height: 110px; }
+
+        /* ===== ХЕРО-СЕКЦИЯ ===== */
+        .hero {
+            padding: 80px 0 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content h1 {
+            font-size: 62px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content h1 span {
+            color: var(--soft-pink);
+            display: inline-block;
+            border-bottom: 3px solid var(--soft-pink);
+            padding-bottom: 5px;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-dim);
+            max-width: 90%;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--soft-pink);
+            color: var(--black);
+            border: none;
+            padding: 16px 38px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 10px 20px rgba(255, 184, 210, 0.3);
+            border: 1px solid transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--soft-pink);
+            border-color: var(--soft-pink);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border: 1px solid rgba(255, 184, 210, 0.5);
+            padding: 16px 38px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary i {
+            color: var(--soft-pink);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--soft-pink);
+            background-color: rgba(255, 184, 210, 0.15);
+        }
+
+        /* ===== СЕКЦИЯ ОСОБЕННОСТЕЙ ===== */
+        .features {
+            padding: 100px 0;
+            background-color: rgba(17, 17, 17, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 60px 60px 0 0;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 184, 210, 0.2);
+        }
+
+        .section-tag {
+            color: var(--soft-pink);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            max-width: 600px;
+            margin-bottom: 60px;
+            line-height: 1.3;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: rgba(34, 34, 34, 0.6);
+            padding: 40px 30px;
+            border-radius: 30px;
+            transition: transform 0.3s, background-color 0.3s;
+            border: 1px solid rgba(255,184,210,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            background-color: rgba(42, 42, 42, 0.7);
+            border-color: rgba(255,184,210,0.4);
+            transform: translateY(-5px);
+        }
+
+        .icon-circle {
+            background-color: rgba(255,184,210,0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .icon-circle i {
+            font-size: 28px;
+            color: var(--soft-pink);
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 16px;
+        }
+
+        /* ===== КАК ЭТО РАБОТАЕТ ===== */
+        .workflow {
+            padding: 100px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .workflow-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            flex: 1;
+            background-color: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 40px 30px;
+            position: relative;
+            border: 1px solid rgba(255,184,210,0.2);
+        }
+
+        .step-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: rgba(255,184,210,0.3);
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            line-height: 1;
+        }
+
+        .step h4 {
+            font-size: 24px;
+            margin: 20px 0 15px;
+        }
+
+        .step p {
+            color: var(--text-dim);
+        }
+
+        /* ===== ТЕХНОЛОГИИ ===== */
+        .tech-showcase {
+            background: linear-gradient(145deg, rgba(10, 10, 10, 0.6), rgba(17, 17, 17, 0.7));
+            backdrop-filter: blur(15px);
+            padding: 80px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,184,210,0.3);
+            margin: 80px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-showcase h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .tech-showcase h2 span {
+            color: var(--soft-pink);
+        }
+
+        .tech-badges {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 50px 0 20px;
+        }
+
+        .badge {
+            background-color: rgba(255,184,210,0.15);
+            padding: 15px 30px;
+            border-radius: 60px;
+            font-weight: 600;
+            border: 1px solid rgba(255,184,210,0.4);
+            color: var(--soft-pink);
+            backdrop-filter: blur(5px);
+        }
+
+        /* ===== ПРИЗЫВ К ДЕЙСТВИЮ ===== */
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,184,210,0.3);
+            border-bottom: 1px solid rgba(255,184,210,0.3);
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-section h2 {
+            font-size: 56px;
+            font-weight: 800;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            line-height: 1.2;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* ===== ФУТЕР ===== */
+        .footer {
+            padding: 50px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 14px;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-top: 1px solid rgba(255, 184, 210, 0.2);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .about-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .about-link:hover {
+            color: var(--soft-pink);
+        }
+
+        .about-link i {
+            font-size: 16px;
+            color: var(--soft-pink);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .social-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: var(--soft-pink);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1000px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content h1 {
+                font-size: 48px;
+            }
+            .hero-description {
+                max-width: 100%;
+            }
+            .cta-group {
+                justify-content: center;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .workflow-steps {
+                flex-direction: column;
+            }
+            .demo-player {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .tech-showcase {
+                padding: 40px 20px;
+            }
+            .cta-section h2 {
+                font-size: 38px;
+            }
+            .player-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .chat-window {
+                width: 300px;
+                right: 0;
+            }
+            .footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Только модальное окно "О программе" -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content about-content">
+            <button class="modal-close" onclick="closeAboutModal()">&times;</button>
+            <div class="about-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <h2>О программе</h2>
+            <div class="about-name">
+                Кудрявцева Ксения Сергеевна
+            </div>
+            <div class="about-group">
+                <p>Студентка группы 09.07.13р</p>
+            </div>
+            <div style="margin: 20px 0; color: var(--text-dim);">
+                <i class="fas fa-calendar-alt" style="color: var(--soft-pink); margin-right: 8px;"></i>
+                2026 год
+            </div>
+            <div style="color: var(--text-dim); font-size: 14px; line-height: 1.8;">
+                Разработка онлайн музыки NEON BEAT<br>
+                Дипломный проект<br>
+                Все права защищены
+            </div>
+        </div>
+    </div>
+
+    <!-- Чат поддержки -->
+    <div class="support-chat">
+        <button class="chat-toggle" onclick="toggleChat()">
+            <i class="fas fa-headset"></i>
+        </button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h3><i class="fas fa-headset" style="margin-right: 8px;"></i> Поддержка NEON BEAT</h3>
+                <button class="chat-close" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message support">
+                    <div class="message-content">
+                        Привет! Я виртуальный помощник NEON BEAT. Чем могу помочь? 🎵
+                    </div>
+                    <div class="message-time">только что</div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Напишите сообщение..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button class="chat-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <nav class="navbar">
+            <div class="logo">NEON BEAT</div>
+            <div class="nav-links">
+                <a href="#features">Возможности</a>
+                <a href="#workflow">Процесс</a>
+                <a href="#tech">Технологии</a>
+                <a href="#pricing">Цены</a>
+            </div>
+            <a href="/login" class="nav-button">Войти</a>
+        </nav>
+
+        <!-- Hero секция -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Создавай музыку <span>онлайн</span> с нуля</h1>
+                <p class="hero-description">Студия разработки треков прямо в браузере. Нейросети, реальные инструменты, коллаборации в реальном времени. Всё в черном и нежно-розовом.</p>
+                <div class="cta-group">
+                    <a href="/register" class="btn-primary">Начать бесплатно</a>
+                    <a href="#demo" class="btn-secondary"><i class="fas fa-play"></i> Демо-трек</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="waveform">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Демо-плеер -->
+        <section id="demo" class="demo-player">
+            <div class="player-info">
+                <h3>Демо-трек <span id="trackTitle">Neon Dreams</span></h3>
+                <p>Послушайте, как звучит музыка, созданная в нашей студии. Полная версия доступна после регистрации.</p>
+                <div class="track-title" id="currentTrackTitle">Neon Dreams (Original Mix)</div>
+                <div class="track-artist" id="currentTrackArtist">NEON BEAT Collective</div>
+                <div class="progress-bar" onclick="seekTrack(event)">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="time-stamps">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">4:02</span>
+                </div>
+                <div class="player-controls">
+                    <button class="control-btn" onclick="previousTrack()"><i class="fas fa-backward"></i></button>
+                    <button class="control-btn play-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
+                    <button class="control-btn" onclick="nextTrack()"><i class="fas fa-forward"></i></button>
+                    <div class="volume-control">
+                        <i class="fas fa-volume-up"></i>
+                        <div class="volume-slider" onclick="setVolume(event)">
+                            <div class="volume-fill" id="volumeFill" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="visualizer" id="visualizer">
+                <div class="bar" id="bar1"></div>
+                <div class="bar" id="bar2"></div>
+                <div class="bar" id="bar3"></div>
+                <div class="bar" id="bar4"></div>
+                <div class="bar" id="bar5"></div>
+                <div class="bar" id="bar6"></div>
+                <div class="bar" id="bar7"></div>
+            </div>
+        </section>
+
+        <!-- Секция особенностей -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-tag">Почему мы</div>
+                <h2 class="section-title">Разработка музыки без границ</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-microchip"></i></div>
+                        <h3>AI-ассистент</h3>
+                        <p>Нейросеть поможет подобрать аккорды, сгенерировать бит или обработать вокал в пару кликов.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-users"></i></div>
+                        <h3>Коллаборации</h3>
+                        <p>Работайте над треком с другими музыкантами в реальном времени. Чат, видео, общий проект.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3>Облачный мастер</h3>
+                        <p>Мастеринг и сведение на серверах студийного качества. Экспорт в любой формат без потерь.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-headphones"></i></div>
+                        <h3>Библиотека звуков</h3>
+                        <p>Тысячи сэмплов, пресетов и MIDI от известных продюсеров. Постоянное обновление.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-chart-line"></i></div>
+                        <h3>Аналитика треков</h3>
+                        <p>Умный анализ частот, громкости и структуры. Рекомендации как сделать хит.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="fas fa-mobile-alt"></i></div>
+                        <h3>Мобильная студия</h3>
+                        <p>Полноценное приложение для iOS и Android. Начинайте трек на телефоне, заканчивайте на десктопе.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Схема работы -->
+            <section id="workflow" class="workflow">
+                <div class="section-tag">Процесс</div>
+                <h2 class="section-title">Как создать трек за 3 шага</h2>
+                <div class="workflow-steps">
+                    <div class="step">
+                        <span class="step-number">01</span>
+                        <div class="icon-circle" style="margin-bottom: 20px;"><i class="fas fa-pen-fancy"></i></div>
+                        <h4>Идея и структура</h4>
+                        <p>Запишите голос, наиграйте мелодию или загрузите семпл. AI предложит варианты развития.</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">02</span>
+                        <div class="icon-circle" style="margin-bottom: 20px;"><i class="fas fa-sliders-h"></i></div>
+                        <h4>Аранжировка и звук</h4>
+                        <p>Добавляйте партии, применяйте эффекты, работайте с виртуальными синтезаторами.</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">03</span>
+                        <div class="icon-circle" style="margin-bottom: 20px;"><i class="fas fa-check-double"></i></div>
+                        <h4>Сведение и релиз</h4>
+                        <p>Автоматический мастеринг, экспорт и публикация на все стриминговые платформы.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Технологии -->
+            <section id="tech" class="tech-showcase">
+                <h2>Сделано на <span>передовых</span> технологиях</h2>
+                <p style="max-width: 600px; color: var(--text-dim);">WebAudio, TensorFlow.js, WebRTC и проприетарные алгоритмы обработки звука.</p>
+                <div class="tech-badges">
+                    <span class="badge">WebAudio API</span>
+                    <span class="badge">TensorFlow.js</span>
+                    <span class="badge">WebRTC</span>
+                    <span class="badge">WASM</span>
+                    <span class="badge">MIDI 2.0</span>
+                </div>
+            </section>
+
+            <!-- Призыв к действию -->
+            <section id="pricing" class="cta-section">
+                <h2>Начни писать музыку в нежно-розовом настроении</h2>
+                <div class="cta-actions">
+                    <a href="/register" class="btn-primary">Попробовать бесплатно</a>
+                    <a onclick="openSupportChat()" class="btn-secondary"><i class="far fa-comment"></i> Спросить у поддержки</a>
+                </div>
+                <p style="margin-top: 30px; color: var(--text-dim);">30 дней триала, потом от 299₽/мес</p>
+            </section>
+
+            <!-- Футер -->
+            <footer class="footer">
+                <div class="footer-left">
+                    <div class="logo" style="font-size: 20px;">NEON BEAT</div>
+                    <a onclick="openAboutModal()" class="about-link">
+                        <i class="fas fa-info-circle"></i>
+                        О программе
+                    </a>
+                </div>
+                <div>© 2026 Разработка для музыкантов</div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Аудио элемент для демо-треков -->
+    <audio id="audioPlayer" preload="auto"></audio>
+
+    <script>
+        // Модальное окно "О программе"
+        function openAboutModal() {
+            document.getElementById('aboutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAboutModal() {
+            document.getElementById('aboutModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Чат поддержки
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('active');
+        }
+
+        function openSupportChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+
+                setTimeout(() => {
+                    const responses = [
+                        "Спасибо за вопрос! Наша команда уже работает над ответом 🎵",
+                        "Отличный вопрос! Да, эта функция доступна в премиум-версии.",
+                        "Мы обязательно поможем! Можете также заглянуть в раздел FAQ.",
+                        "Интересно! Передам ваш вопрос разработчикам.",
+                        "Конечно! Сейчас всё расскажу подробнее..."
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, 'support');
+                }, 1000);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            const now = new Date();
+            const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+            messageDiv.innerHTML = `
+                <div class="message-content">${text}</div>
+                <div class="message-time">${timeString}</div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Аудио плеер
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playIcon = document.getElementById('playIcon');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+        const trackTitleSpan = document.getElementById('trackTitle');
+        const currentTrackTitleSpan = document.getElementById('currentTrackTitle');
+        const currentTrackArtistSpan = document.getElementById('currentTrackArtist');
+
+        const visualizerBars = [
+            document.getElementById('bar1'),
+            document.getElementById('bar2'),
+            document.getElementById('bar3'),
+            document.getElementById('bar4'),
+            document.getElementById('bar5'),
+            document.getElementById('bar6'),
+            document.getElementById('bar7')
+        ];
+
+        const tracks = [
+            {
+                title: 'Neon Dreams',
+                artist: 'NEON BEAT Collective',
+                url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                duration: '5:06'
+            },
+            {
+                title: 'Pink Horizon',
+                artist: 'Luna Wave',
+                url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+                duration: '4:54'
+            },
+            {
+                title: 'Digital Love',
+                artist: 'Synth Paradise',
+                url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+                duration: '4:36'
+            }
+        ];
+
+        let currentTrack = 0;
+        let isPlaying = false;
+        let volume = 0.7;
+        let animationFrame;
+
+        function initPlayer() {
+            audioPlayer.volume = volume;
+            updateTrackInfo();
+
+            audioPlayer.addEventListener('timeupdate', updateProgress);
+            audioPlayer.addEventListener('loadedmetadata', updateDuration);
+            audioPlayer.addEventListener('ended', nextTrack);
+            audioPlayer.addEventListener('play', () => { isPlaying = true; startVisualizer(); });
+            audioPlayer.addEventListener('pause', () => { isPlaying = false; });
+        }
+
+        function updateTrackInfo() {
+            const track = tracks[currentTrack];
+            trackTitleSpan.textContent = track.title;
+            currentTrackTitleSpan.textContent = track.title + ' (Original Mix)';
+            currentTrackArtistSpan.textContent = track.artist;
+            durationSpan.textContent = track.duration;
+            audioPlayer.src = track.url;
+        }
+
+        function updateDuration() {
+            if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                const minutes = Math.floor(audioPlayer.duration / 60);
+                const seconds = Math.floor(audioPlayer.duration % 60);
+                durationSpan.textContent = minutes + ':' + (seconds < 10 ? '0' + seconds : seconds);
+            }
+        }
+
+        function updateProgress() {
+            if (audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressFill.style.width = percent + '%';
+
+                const minutes = Math.floor(audioPlayer.currentTime / 60);
+                const seconds = Math.floor(audioPlayer.currentTime % 60);
+                currentTimeSpan.textContent = minutes + ':' + (seconds < 10 ? '0' + seconds : seconds);
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playIcon.className = 'fas fa-play';
+            } else {
+                audioPlayer.play();
+                playIcon.className = 'fas fa-pause';
+                startVisualizer();
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function previousTrack() {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+            updateTrackInfo();
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % tracks.length;
+            updateTrackInfo();
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function seekTrack(event) {
+            const progressBar = event.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const width = rect.width;
+            const percentage = x / width;
+
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = percentage * audioPlayer.duration;
+            }
+        }
+
+        function setVolume(event) {
+            const volumeSlider = event.currentTarget;
+            const rect = volumeSlider.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const width = rect.width;
+            const percentage = Math.min(1, Math.max(0, x / width));
+
+            volume = percentage;
+            audioPlayer.volume = volume;
+            document.getElementById('volumeFill').style.width = (percentage * 100) + '%';
+        }
+
+        function startVisualizer() {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+
+            function updateVisualizer() {
+                if (!isPlaying) {
+                    visualizerBars.forEach((bar, index) => {
+                        const baseHeights = [80, 120, 160, 100, 140, 90, 110];
+                        bar.style.height = baseHeights[index] + 'px';
+                    });
+                    animationFrame = requestAnimationFrame(updateVisualizer);
+                    return;
+                }
+
+                const now = Date.now() / 200;
+
+                visualizerBars.forEach((bar, index) => {
+                    const baseHeight = 80 + index * 10;
+                    const variation = Math.sin(now + index) * 40 + Math.cos(now * 0.5 + index) * 30;
+                    let height = baseHeight + variation;
+                    height = Math.max(40, Math.min(200, height));
+                    bar.style.height = Math.round(height) + 'px';
+                });
+
+                animationFrame = requestAnimationFrame(updateVisualizer);
+            }
+
+            updateVisualizer();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initPlayer();
+            startVisualizer();
+        });
+    </script>
+</body>
+</html>
